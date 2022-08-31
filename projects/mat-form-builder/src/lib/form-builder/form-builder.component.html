@@ -1,0 +1,117 @@
+
+<form [formGroup]='form' (ngSubmit)='returnForm()'>
+  <div class='row'>
+    <div class='col' *ngFor='let item of items; let i = index' [class.col-12]="item.type === 5">
+      <div *ngIf="item.type === 5">
+        <mat-label>{{ item?.label }}</mat-label>
+        <hr class='w-100 bg-danger' />
+      </div>
+
+      <div class='col' *ngIf="item?.type !== 5">
+        <mat-form-field appearance='outline' class='w-100' *ngIf="!item?.isFile">
+          <mat-label>{{ item.label }}</mat-label>
+
+          <!--Normal Input Control-->
+          <input
+            matInput
+            [formControlName]='item.formControlName'
+            *ngIf="!item.options && item.type !== 4 && !item.isTextArea && item.type"
+
+            [required]='item.required'
+            [readonly]='item.disabled'
+          />
+
+          <!--Normal Select Option Control-->
+          <mat-select
+            *ngIf='item.options'
+            [multiple]='item.isMultiple'
+            [formControlName]='item.formControlName'
+            [disabled]='item.disabled'
+          >
+            <mat-option *ngFor='let option of item.options' [value]='option.value'>
+              {{ option.name }}
+            </mat-option>
+          </mat-select>
+
+<!--          &lt;!&ndash;Select With Auto Complete Option Control&ndash;&gt;-->
+<!--          <div *ngIf='item.options && item?.isAutoComplete'>-->
+<!--            <mat-select [multiple]='item.isMultiple'-->
+<!--                        [formControlName]='item.formControlName'-->
+<!--                        [disabled]='item?.disabled'>-->
+<!--              <input (keyup)='onKey($event.target, i)' class='w-100' name='search' autofocus [autofocus]='true' />-->
+<!--              <mat-option *ngFor='let option of item.options' [value]='option.value'>-->
+<!--                {{ option.name }}-->
+<!--                {{ option.name }}-->
+<!--                {{ option.name }}-->
+<!--              </mat-option>-->
+<!--            </mat-select>-->
+<!--          </div>-->
+
+          <!--Normal Date Picker Control-->
+          <input
+            matInput
+            *ngIf="item.type === 4"
+            [matDatepicker]='picker'
+            [formControlName]='item.formControlName'
+            [disabled]='item.disabled'
+          />
+          <mat-datepicker-toggle [for]='picker' matSuffix *ngIf="item.type === 4"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+
+          <!--Normal Text Area Control-->
+          <textarea
+            matInput
+            style='line-height: 2'
+            *ngIf='item.isTextArea'
+            [formControlName]='item.formControlName'
+            [required]='item.required'
+            [readonly]='item.disabled'
+          >
+          </textarea>
+
+          <!--Normal File Control-->
+          <input
+            *ngIf='item?.isFile'
+            type='file'
+            [formControlName]='item.formControlName'
+            [required]='item.required'
+            [readonly]='item.disabled'
+          />
+
+          <mat-hint *ngIf='item.hint'>{{ item.hint }}</mat-hint>
+        </mat-form-field>
+
+        <input
+          name='uploadedFile'
+          class='d-none'
+          style="display: none"
+          type='file'
+          id='{{ item.formControlName }}'
+          (change)='addFile($event, item.formControlName)'
+          *ngIf='item?.isFile'
+        />
+        <button
+          mat-raised-button
+          color='accent'
+          class='w-100 mt-3 mb-3'
+          (click)='triggerFileSelect(item.formControlName)'
+          *ngIf='item.isFile'
+          type='button'
+        >
+          {{ form.get(item.formControlName)?.value.name || item.label }}
+        </button>
+        <mat-hint *ngIf='item.isFile && patchValue'>
+          <a href='javascript:void(0)' (click)='openImage()'>Download Now</a>
+        </mat-hint>
+      </div>
+    </div>
+  </div>
+
+  <div class='row mt-2' *ngIf='showSaveButton'>
+    <div class='col'>
+      <button mat-raised-button [color]='saveButtonColor' [disabled]='form.invalid'>
+        {{ saveButtonName }}
+      </button>
+    </div>
+  </div>
+</form>

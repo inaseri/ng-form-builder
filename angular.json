@@ -1,5 +1,8 @@
 {
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "cli": {
+    "analytics": "5efa03ef-121f-4cd7-b14e-4d04951be51e"
+  },
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
@@ -31,6 +34,7 @@
               "src/assets"
             ],
             "styles": [
+              "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
               "src/styles.scss"
             ],
             "scripts": []
@@ -99,9 +103,41 @@
               "src/assets"
             ],
             "styles": [
+              "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
               "src/styles.scss"
             ],
             "scripts": []
+          }
+        }
+      }
+    },
+    "mat-form-builder": {
+      "projectType": "library",
+      "root": "projects/mat-form-builder",
+      "sourceRoot": "projects/mat-form-builder/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "project": "projects/mat-form-builder/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/mat-form-builder/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/mat-form-builder/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/mat-form-builder/src/test.ts",
+            "tsConfig": "projects/mat-form-builder/tsconfig.spec.json",
+            "karmaConfig": "projects/mat-form-builder/karma.conf.js"
           }
         }
       }
